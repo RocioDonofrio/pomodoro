@@ -1,8 +1,8 @@
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { Audio } from "expo-av";
 
-export default Boton = (props) => {
-  const { activo, setActivo } = props;
+const Boton = (props) => {
+  const { activo, setActivo, reiniciar } = props;
 
   const handleClick = () => {
     setActivo(!activo);
@@ -15,36 +15,37 @@ export default Boton = (props) => {
     );
     await sound.playAsync();
   };
+
   return (
-    <View>
-      <TouchableOpacity style={styles.boton} onPress={() => handleClick()}>
-        <text>{activo ? "Parar" : "Comenzar"}</text>// si el boton lo vamos a
-        usar solo una vez esta seria la opcion, si se va a usar mas d euna vez
-        lo ideal seria parametrizar
+    <View style={styles.container}>
+      <TouchableOpacity style={styles.boton} onPress={handleClick}>
+        <Text style={styles.texto}>{activo ? "Parar" : "Comenzar"}</Text>
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.boton} onPress={reiniciar}>
+        <Text style={styles.texto}>Reiniciar</Text>
       </TouchableOpacity>
     </View>
   );
 };
+
 const styles = StyleSheet.create({
+  container: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    marginTop: 10,
+  },
   boton: {
     backgroundColor: "white",
     margin: 10,
     height: 50,
     borderRadius: 10,
     justifyContent: "center",
+    paddingHorizontal: 20,
   },
-
   texto: {
     fontSize: 20,
     alignSelf: "center",
   },
 });
 
-//export default Boton = (props) => {
-//const { Text } = props;
-// return (
-// <View>
-// <Text>{texto}</Text>
-// </View>
-//);
-//};
+export default Boton;

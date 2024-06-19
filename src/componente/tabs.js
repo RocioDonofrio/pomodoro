@@ -1,16 +1,14 @@
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 export default Tabs = (props) => {
-  const { seleccion, setseleccion, tiempo, setTiempo, setActivo } = props; //desarmar el props
-
-  const opciones = ["Pomodoro", "Descanso", "Descancito"];
+  const { seleccion, setSeleccion, setTiempo, setActivo, colores } = props;
+  const opciones = ["Pomodoro", "Descanso", "Descansito"];
 
   const handleCambioSeleccion = (index) => {
-    setseleccion(index);
+    setSeleccion(index);
     const nuevoTiempo = index === 0 ? 25 : index === 1 ? 10 : 5;
     setTiempo(nuevoTiempo * 60);
-
-    //setTiempo(index === 0 ? 25*60 : index === 1 ? 10*60 : 5*60);
+    setActivo(false);
   };
 
   return (
@@ -20,21 +18,30 @@ export default Tabs = (props) => {
           key={index}
           style={[
             styles.boton,
-            seleccion !== index && { borderColor: "transparente" },
-          ]} //si coincide con la seleccion el borde cambia
+            {
+              borderColor: seleccion === index ? colores.button : "transparent",
+            },
+            { backgroundColor: seleccion === index ? colores.button : "white" },
+          ]}
           onPress={() => handleCambioSeleccion(index)}
         >
-          <Text style={styles.texto}>{item} </Text>
+          <Text
+            style={[
+              styles.texto,
+              { color: seleccion === index ? colores.text : "black" },
+            ]}
+          >
+            {item}
+          </Text>
         </TouchableOpacity>
       ))}
     </View>
   );
 };
-//creando el objeto "estilo"
+
 const styles = StyleSheet.create({
   boton: {
-    borderColor: "black",
-    borderWhidth: 1,
+    borderWidth: 1,
     borderRadius: 10,
     padding: 10,
     margin: 5,

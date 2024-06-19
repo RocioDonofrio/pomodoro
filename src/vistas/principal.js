@@ -1,17 +1,20 @@
 import { Platform, SafeAreaView, StyleSheet, Text, View } from "react-native";
+import Tabs from "../componente/tabs";
+import Timer from "../componente/timer";
 import Boton from "../componente/boton";
-import { useState } from "react";
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Audio } from "expo-av";
 
 export default principal = () => {
-  const colores = ["#21EB98", "BF60EB", "EBBE21"];
+  const colores = [
+    { background: "#B991E8", button: "#46167F", text: "#FFFFFF" }, // Pomodoro
+    { background: "#4682B4", button: "#A8BBF5", text: "#FFFFFF" }, // Descanso
+    { background: "#E9A262", button: "#FF6347", text: "#FFFFFF" }, // Descansito
+  ];
 
-  const [seleccion, setSeleccion] = useState("POMO" | "SHORT" | "LONG");
-
+  const [seleccion, setSeleccion] = useState(0); // 0 for Pomodoro, 1 for Descanso, 2 for Descansito
   const [tiempo, setTiempo] = useState(25 * 60);
-
-  conts[(activo, setActivo)] = useState(false);
+  const [activo, setActivo] = useState(false);
 
   const Alarma = async () => {
     const { sound } = await Audio.Sound.createAsync(
@@ -33,19 +36,23 @@ export default principal = () => {
 
     if (tiempo === 0) {
       setActivo(false);
-      setTiempo(tiempoActual === 0 ? 1500 : tiempoActual === 1 ? 300 : 900);
+      setTiempo(seleccion === 0 ? 1500 : seleccion === 1 ? 300 : 900);
       Alarma();
     }
 
     return () => clearInterval(interval);
   }, [tiempo, activo]);
+  const reiniciar = () => {
+    setActivo(false);
+    setTiempo(seleccion === 0 ? 25 * 60 : seleccion === 1 ? 10 * 60 : 5 * 60);
+  };
 
   return (
     <SafeAreaView
-      Style={[
+      style={[
         styles.contenedor,
         {
-          backgroundColor: colores[seleccion],
+          backgroundColor: colores[seleccion].background,
         },
       ]}
     >
@@ -53,20 +60,26 @@ export default principal = () => {
         <Tabs
           seleccion={seleccion}
           setSeleccion={setSeleccion}
-          tiempo={tiempo}
           setTiempo={setTiempo}
+          setActivo={setActivo}
+          colores={colores[seleccion]}
         />
-        <Timer tiempo={tiempo} />
-        <Boton activo={activo} setActivo={setActivo} />
+        <Timer tiempo={tiempo} colores={colores[seleccion]} />
+        <Boton
+          activo={activo}
+          setActivo={setActivo}
+          reiniciar={reiniciar}
+          colores={colores[seleccion]}
+        />
       </View>
     </SafeAreaView>
   );
 };
 
-//const styles = StyleSheet.create({
-//  contenedor: {
-//   backgroundColor: "red",
-//    flex: 0.25,
-//    marginTop: 10,
-//  },
-//});
+const styles = StyleSheet.create({
+  contenedor: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+});

@@ -1,15 +1,17 @@
+import React from "react";
 import { StyleSheet, Text, View } from "react-native";
 
-export default Timer = (props) => {
-  const { tiempo } = props;
-
+const timer = (props) => {
+  const { tiempo, colores } = props;
   const formatoTiempo = `${Math.floor(tiempo / 60)
     .toString()
     .padStart(2, "0")} : ${(tiempo % 60).toString().padStart(2, "0")}`;
 
   return (
-    <View style={styles.contenedor}>
-      <Text style={styles.texto}>{tiempo}</Text>
+    <View style={[styles.contenedor, { backgroundColor: colores.button }]}>
+      <Text style={[styles.texto, { color: colores.text }]}>
+        {formatoTiempo}
+      </Text>
     </View>
   );
 };
@@ -17,7 +19,6 @@ export default Timer = (props) => {
 const styles = StyleSheet.create({
   contenedor: {
     borderWidth: 1,
-    backgroundColor: "#F0B52B",
     height: 250,
     alignContent: "center",
     justifyContent: "center",
@@ -30,3 +31,5 @@ const styles = StyleSheet.create({
     alignSelf: "center",
   },
 });
+
+export default timer;
